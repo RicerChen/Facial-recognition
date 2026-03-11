@@ -223,7 +223,7 @@ class EmotionRecogThread(QThread):
 class EmotionGUI(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("CNN + LSTM 表情识别（M4 优化）")
+        self.setWindowTitle("CNN + LSTM 表情识别")
         self.setGeometry(100, 100, 800, 600)
         self.recog_thread = None
 
@@ -232,7 +232,7 @@ class EmotionGUI(QMainWindow):
         layout = QVBoxLayout(central_widget)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        title_label = QLabel("CNN + LSTM 表情识别（M4 加速）")
+        title_label = QLabel("CNN + LSTM 表情识别")
         title_label.setStyleSheet("font-size: 20px; font-weight: bold; margin-bottom: 20px;")
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title_label)
