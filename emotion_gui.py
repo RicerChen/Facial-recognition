@@ -3,19 +3,19 @@ import numpy as np
 import torch
 import torch.nn as nn
 import mediapipe as mp
-# ========== M4 Mac mediapipe 0.10.x 正确适配 ==========
+# ========== M4 Mac mediapipe 0.10.x  ==========
 mp_face_mesh = mp.solutions.face_mesh
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
-# 关键连接常量（直接从 mp_face_mesh 取，不要用 frozenset 变量点属性）
+
 REGION_CONNECTIONS = {
     "lips": mp_face_mesh.FACEMESH_LIPS,
     "left_eye": mp_face_mesh.FACEMESH_LEFT_EYE,
     "right_eye": mp_face_mesh.FACEMESH_RIGHT_EYE,
     "left_eyebrow": mp_face_mesh.FACEMESH_LEFT_EYEBROW,
     "right_eyebrow": mp_face_mesh.FACEMESH_RIGHT_EYEBROW,
-    "nose": mp_face_mesh.FACEMESH_CONTOURS,       # 没有 FACEMESH_NOSE，用 CONTOURS 包含鼻子轮廓
+    "nose": mp_face_mesh.FACEMESH_CONTOURS,      
     "face_oval": mp_face_mesh.FACEMESH_FACE_OVAL,
 }
 
@@ -223,7 +223,7 @@ class EmotionRecogThread(QThread):
 class EmotionGUI(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("CNN + LSTM 表情识别")
+        self.setWindowTitle("CNN + LSTM FacialRecogniion ")
         self.setGeometry(100, 100, 800, 600)
         self.recog_thread = None
 
@@ -232,22 +232,22 @@ class EmotionGUI(QMainWindow):
         layout = QVBoxLayout(central_widget)
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        title_label = QLabel("CNN + LSTM 表情识别")
+        title_label = QLabel("CNN + LSTM FacialRecogniion")
         title_label.setStyleSheet("font-size: 20px; font-weight: bold; margin-bottom: 20px;")
         title_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(title_label)
 
-        self.cam_btn = QPushButton("摄像头实时识别")
+        self.cam_btn = QPushButton("Camera real-time recognition")
         self.cam_btn.setStyleSheet("font-size: 14px; padding: 10px 20px; margin: 5px;")
         self.cam_btn.clicked.connect(self.start_cam)
         layout.addWidget(self.cam_btn)
 
-        self.video_btn = QPushButton("选择视频文件识别")
+        self.video_btn = QPushButton("Select video file recognition")
         self.video_btn.setStyleSheet("font-size: 14px; padding: 10px 20px; margin: 5px;")
         self.video_btn.clicked.connect(self.select_video)
         layout.addWidget(self.video_btn)
 
-        self.stop_btn = QPushButton("停止识别")
+        self.stop_btn = QPushButton("Stop recognizing")
         self.stop_btn.setStyleSheet("font-size: 14px; padding: 10px 20px; margin: 5px; background-color: #ff4444; color: white;")
         self.stop_btn.clicked.connect(self.stop_recog)
         self.stop_btn.setEnabled(False)
@@ -259,14 +259,14 @@ class EmotionGUI(QMainWindow):
 
         self.status_bar = QStatusBar()
         self.setStatusBar(self.status_bar)
-        self.status_bar.showMessage("就绪 - M4 MPS 加速已启用", 3000)
+        self.status_bar.showMessage("Ready - M4 MPS acceleration is enabled", 3000)
 
     def start_cam(self):
         self.start_recog(0)
 
     def select_video(self):
         path, _ = QFileDialog.getOpenFileName(
-            self, "选择视频文件", "", "Video Files (*.mp4 *.avi *.mov *.mkv)"
+            self, "Select video file", "", "Video Files (*.mp4 *.avi *.mov *.mkv)"
         )
         if path:
             self.start_recog(path)
@@ -281,7 +281,7 @@ class EmotionGUI(QMainWindow):
         self.cam_btn.setEnabled(False)
         self.video_btn.setEnabled(False)
         self.stop_btn.setEnabled(True)
-        self.status_bar.showMessage("识别中 - 按 'q' 或点击停止按钮退出")
+        self.status_bar.showMessage("Recognizing - Press 'q' or click the stop button to exit.")
 
     def stop_recog(self):
         if self.recog_thread and self.recog_thread.isRunning():
@@ -290,7 +290,7 @@ class EmotionGUI(QMainWindow):
         self.video_btn.setEnabled(True)
         self.stop_btn.setEnabled(False)
         self.video_label.clear()
-        self.status_bar.showMessage("已停止识别", 3000)
+        self.status_bar.showMessage("Recognition has stopped", 3000)
 
     def update_video_frame(self, frame):
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -304,7 +304,7 @@ class EmotionGUI(QMainWindow):
         self.video_label.setPixmap(pixmap)
 
     def show_error(self, msg):
-        QMessageBox.critical(self, "错误", msg)
+        QMessageBox.critical(self, "mistake", msg)
         self.stop_recog()
 
     def closeEvent(self, event):
